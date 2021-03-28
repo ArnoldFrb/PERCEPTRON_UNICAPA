@@ -1,6 +1,7 @@
 import numpy as np
 import pylab as plt
 import pandas as pd
+from IPython.display import display
 
 class TestNeurona:
 

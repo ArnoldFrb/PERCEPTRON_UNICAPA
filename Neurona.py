@@ -2,8 +2,10 @@ import numpy as np
 import os
 import errno
 import math
-import pylab as plt
+import matplotlib.pyplot as plt
 import pandas as pd
+from matplotlib.animation import FuncAnimation
+from IPython.display import display
 
 class Neurona:
 
@@ -19,6 +21,9 @@ class Neurona:
         self.ERROR_MAXIMO = ERROR_MAXIMO
         self.NUMERO_ITERACIONES = NUMERO_ITERACIONES
         self.FUNCION_SALIDA = FUNCION_SALIDA
+        self.Error = []
+        self.Itera = []
+
 
     #METODO PARA ENTRENAR LA NEURONA
     def ENTRENAR(self, ARC_PESOS, ARC_UMBRALES, CARPETA):
@@ -70,11 +75,12 @@ class Neurona:
         print()
         print("---ENTRENAMIENTO---")
         print()
-
+        
         plt.xlabel('ITERACION')
         plt.ylabel('ERROR RMS')
         plt.title('ERRORES DE LAS ITERACIONES')
         plt.grid()
+        #plt.style.use('ggplot')
 
         #CICLO PARA ITERACIONES
         ITERACION_INICIAL = 0
@@ -96,8 +102,9 @@ class Neurona:
             #METODO PARA OBTENER EL ERROR DE LA ITERACION
             ERROR_RMS = (np.sum(ERROR_PATRON)) / len(self.MATRIZ_ENTRADA)
             
-            plt.plot(ITERACION_INICIAL+1, ERROR_RMS, 'o', linewidth=3, color=(0.2,0.1,0.4))
-            
+            self.Error.append(ERROR_RMS)
+            self.Itera.append(ITERACION_INICIAL+1)
+
             ITERACION_INICIAL+=1
 
             #CONDICIONES DE PARADA
@@ -117,9 +124,9 @@ class Neurona:
             UMBRALES_OBTENIDOS = pd.DataFrame(self.MATRIZ_UMBRALES)
             display(UMBRALES_OBTENIDOS)
             print()
-
+        
+        plt.plot(self.Itera, self.Error, linewidth=1)
         plt.show()
-
         print("ERROR RMS: ", ERROR_RMS)
         print("NUMERO DE ITERACIONES REALIZADAS: ", ITERACION_INICIAL)
         print()

@@ -35,3 +35,4 @@ class ConfigEntrenamiento:
             RATA_APRENDIZAJE, ERROR_MAXIMO, NUMERO_ITERACIONES, FUNCION_SALIDA
             )
         neuro.ENTRENAR('PESOS.TXT', 'UMBRALES.TXT', self.CARPETA)
+
