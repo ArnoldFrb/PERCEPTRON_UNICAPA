@@ -5,11 +5,11 @@ from Neurona import *
 class ConfigEntrenamiento:
 
     #CONSTRUCTOR
-    def __init__(self, ARCHIVO_ENTRADA = 'ENTRADAS.TXT', ARCHIVO_SALIDA = 'SALIDAS.TXT', DATA = 'COMPUERTAS', CARPETA = 'PRUEBA'):
+    def __init__(self, ENTRENAMIENTO):
 
-        self.MATRIZ_ENTRADA = np.loadtxt('DATA/' + DATA + '/' + ARCHIVO_ENTRADA)
-        self.MATRIZ_SALIDA = np.loadtxt('DATA/' + DATA + '/' + ARCHIVO_SALIDA)
-        self.CARPETA = CARPETA
+        self.MATRIZ_ENTRADA = np.loadtxt('DATA/' + ENTRENAMIENTO + '/' + 'ENTRADAS.TXT')
+        self.MATRIZ_SALIDA = np.loadtxt('DATA/' + ENTRENAMIENTO + '/' + 'SALIDAS.TXT')
+        self.ENTRENAMIENTO = ENTRENAMIENTO
 
     #METODO PARA GENERAR PESOS
     def GENERAR_PESOS(self):
@@ -34,5 +34,4 @@ class ConfigEntrenamiento:
             self.MATRIZ_ENTRADA, self.MATRIZ_SALIDA, self.GENERAR_PESOS(), self.GENERAR_UMBRALES(),
             RATA_APRENDIZAJE, ERROR_MAXIMO, NUMERO_ITERACIONES, FUNCION_SALIDA
             )
-        neuro.ENTRENAR('PESOS.TXT', 'UMBRALES.TXT', self.CARPETA)
-
+        neuro.ENTRENAR(self.ENTRENAMIENTO)

@@ -26,17 +26,12 @@ class Neurona:
 
 
     #METODO PARA ENTRENAR LA NEURONA
-    def ENTRENAR(self, ARC_PESOS, ARC_UMBRALES, CARPETA):
+    def ENTRENAR(self, ENTRENAMIENTO):
 
-        print()
-        print("---CONFIGURACION---")
-        print()
-
-        print('MATRIZ DE DATOS')
         MATRIZ = []
         for I in range(len(self.MATRIZ_ENTRADA)):
             FILA = []
-            for J in range(self.MATRIZ_ENTRADA.ndim):
+            for J in range(len(self.MATRIZ_ENTRADA[0])):
                 FILA.append(self.MATRIZ_ENTRADA[I,J])
 
             for J in range(self.MATRIZ_SALIDA.ndim):
@@ -45,42 +40,20 @@ class Neurona:
             MATRIZ.append(FILA)
 
         COL = []
-        for J in range(self.MATRIZ_ENTRADA.ndim):
-            COL.append("X"+str(J))
+        for I in range(len(self.MATRIZ_ENTRADA[0])):
+            COL.append("X"+str(I))
 
         for J in range(self.MATRIZ_SALIDA.ndim):
             COL.append("Y"+str(J))
 
         df2 = pd.DataFrame(MATRIZ, columns=COL)
         display(df2)
-
-        print()
-        print('PESOS INICIALES')
-        display(pd.DataFrame(self.MATRIZ_PESOS))
-
-        print()
-        print('UMBRALES INICIALES')
-        display(pd.DataFrame(self.MATRIZ_UMBRALES))
-
-        print()
-        print('RATA DE APREMDIZAJE:', self.RATA_APRENDIZAJE)
-        print('ERROR_MAXIMO PERMITIDO:', self.ERROR_MAXIMO)
-        print('NUMERO DE ITERACIONES:', self.NUMERO_ITERACIONES)
-        print('FUNCION DE SALIDA:', self.NOMBRE_SALIDAS())
-
-        print()
-        print("---------------------------")
-        print("---------------------------")
-
-        print()
-        print("---ENTRENAMIENTO---")
         print()
         
+        plt.style.use('ggplot')
+        plt.title('ENTRENAMIENTO - ERROR LA ITERACION')
         plt.xlabel('ITERACION')
         plt.ylabel('ERROR RMS')
-        plt.title('ERRORES DE LAS ITERACIONES')
-        plt.grid()
-        #plt.style.use('ggplot')
 
         #CICLO PARA ITERACIONES
         ITERACION_INICIAL = 0
@@ -101,6 +74,9 @@ class Neurona:
 
             #METODO PARA OBTENER EL ERROR DE LA ITERACION
             ERROR_RMS = (np.sum(ERROR_PATRON)) / len(self.MATRIZ_ENTRADA)
+
+            #plt.scatter(ITERACION_INICIAL, ERROR_RMS)
+            #plt.pause(0.0005)
             
             self.Error.append(ERROR_RMS)
             self.Itera.append(ITERACION_INICIAL+1)
@@ -113,20 +89,14 @@ class Neurona:
         
         if(ERROR_RMS <= self.ERROR_MAXIMO):
 
-            self.GUADAR_PESOS_UMBRALES(CARPETA, ARC_PESOS, ARC_UMBRALES)
+            self.GUADAR_PESOS_UMBRALES(ENTRENAMIENTO)
 
-            print('PESOS OPTIMOS')
-            PESOS_OBTENIDOS = pd.DataFrame(self.MATRIZ_PESOS)
-            display(PESOS_OBTENIDOS)
-
-            print()
-            print('UMBRALES OBTENIDOS')
-            UMBRALES_OBTENIDOS = pd.DataFrame(self.MATRIZ_UMBRALES)
-            display(UMBRALES_OBTENIDOS)
+            print('SE HAN ENCONTRADO LOS PESOS Y UMBRALES OPTIMOS')
             print()
         
         plt.plot(self.Itera, self.Error, linewidth=1)
         plt.show()
+
         print("ERROR RMS: ", ERROR_RMS)
         print("NUMERO DE ITERACIONES REALIZADAS: ", ITERACION_INICIAL)
         print()
@@ -196,18 +166,14 @@ class Neurona:
         return switcher.get(self.FUNCION_SALIDA, "ERROR")
 
     #GUADAR PESOS Y UMBRALES
-    def GUADAR_PESOS_UMBRALES(self, NOMBRE_ENTRENAMIENTO, ARC_PESOS, ARC_UMBRALES):
+    def GUADAR_PESOS_UMBRALES(self, ENTRENAMIENTO):
+        
         try:
-            os.mkdir('CONFIG/' + NOMBRE_ENTRENAMIENTO)
+            os.mkdir('DATA/'+ ENTRENAMIENTO + "/" + self.NOMBRE_SALIDAS())
         except OSError as e:
             if e.errno != errno.EEXIST:
                 raise
 
-        try:
-            os.mkdir('CONFIG/' + NOMBRE_ENTRENAMIENTO + "/" + self.NOMBRE_SALIDAS())
-        except OSError as e:
-            if e.errno != errno.EEXIST:
-                raise
-        
-        np.savetxt("CONFIG/" + NOMBRE_ENTRENAMIENTO + "/" + self.NOMBRE_SALIDAS() + "/" + ARC_PESOS, self.MATRIZ_PESOS)
-        np.savetxt("CONFIG/" + NOMBRE_ENTRENAMIENTO + "/" + self.NOMBRE_SALIDAS() + "/" + ARC_UMBRALES, self.MATRIZ_UMBRALES)
+        np.savetxt("DATA/" + ENTRENAMIENTO + "/CONFIG.TXT", [self.FUNCION_SALIDA])
+        np.savetxt("DATA/" + ENTRENAMIENTO + "/" + self.NOMBRE_SALIDAS() + "/PESOS.TXT", self.MATRIZ_PESOS)
+        np.savetxt("DATA/" + ENTRENAMIENTO + "/" + self.NOMBRE_SALIDAS() + "/UMBRALES.TXT", self.MATRIZ_UMBRALES)

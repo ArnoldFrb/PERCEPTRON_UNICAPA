@@ -17,11 +17,6 @@ class TestNeurona:
     #METODO PARA SIMULAR LA NEURONA
     def SIMULAR(self):
 
-        print()
-        print("---CONFIGURACION---")
-        print()
-
-        print('MATRIZ DE DATOS')
         MATRIZ = []
         for I in range(len(self.MATRIZ_ENTRADA)):
             FILA = []
@@ -43,26 +38,10 @@ class TestNeurona:
         df2 = pd.DataFrame(MATRIZ, columns=COL)
         display(df2)
 
-        print()
-        print('PESOS OPTIMOS')
-        display(pd.DataFrame(self.MATRIZ_PESOS))
-
-        print()
-        print('UMBRALES OPTIMOS')
-        display(pd.DataFrame(self.MATRIZ_UMBRALES))
-
+        plt.style.use('ggplot')
         plt.xlabel('PATRONES')
-        plt.ylabel('SALIDAS YD Y YR')
-        plt.title('YD vs YR')
-        plt.grid()
-        
-        print("---------------------------")
-        print("---------------------------")
-
-        print()
-        print("---SIMULACION---")
-        print()
-
+        plt.ylabel('YD Y YR')
+        plt.title('SIMULACION - YD vs YR')
         #CICLO ENCARGADO DE PRESENTAR LOS PATRONES
         for I in range(len(self.MATRIZ_ENTRADA)):
             PATRON_PRESENTADO = (self.MATRIZ_ENTRADA[I,:])
