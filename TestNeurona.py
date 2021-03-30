@@ -20,7 +20,7 @@ class TestNeurona:
         MATRIZ = []
         for I in range(len(self.MATRIZ_ENTRADA)):
             FILA = []
-            for J in range(self.MATRIZ_ENTRADA.ndim):
+            for J in range(len(self.MATRIZ_ENTRADA[0])):
                 FILA.append(self.MATRIZ_ENTRADA[I,J])
 
             for J in range(self.MATRIZ_SALIDA.ndim):
@@ -29,7 +29,7 @@ class TestNeurona:
             MATRIZ.append(FILA)
 
         COL = []
-        for J in range(self.MATRIZ_ENTRADA.ndim):
+        for J in range(len(self.MATRIZ_ENTRADA[0])):
             COL.append("X"+str(J))
 
         for J in range(self.MATRIZ_SALIDA.ndim):
